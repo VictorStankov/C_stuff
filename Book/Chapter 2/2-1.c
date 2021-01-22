@@ -11,15 +11,18 @@ int main()
     printf("Int:\n\tSigned:\t\t%d\t%d\n\tUnsigned:\t%d\t\t%u\n\n", INT_MIN, INT_MAX, 0, UINT_MAX);
     printf("Long:\n\tSigned:\t\t%d\t%d\n\tUnsigned:\t%d\t\t%u\n\n", LONG_MIN, LONG_MAX, 0, ULONG_MAX);
 
-    int c = 0;
+    unsigned int c = 0;
+    unsigned long long test = 0;
     while(1)
     {
-        if(c != abs(c))
+        if(c != test)
         {
             printf("%d\t", c);
-            printf("%d", abs(c + 1));
+            printf("%lld", test - 1);
             break;
         }
         ++c;
+        ++test;
     }
+    return 0;
 }
