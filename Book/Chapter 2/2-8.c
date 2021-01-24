@@ -12,6 +12,9 @@ int main()
 
 unsigned rightrot(unsigned x, int n)
 {
+    /*Write a function rightrot(x,n) that returns the value of the integer x rotated
+    to the right by n positions.*/
+
     int digit = 0;
     for(int i=0; i<n; ++i)
         digit += pow(2, i);

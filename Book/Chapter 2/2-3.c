@@ -2,9 +2,21 @@
 #include <string.h>
 #include <ctype.h>
 
+int htoi(char hex[]);
+
 int main()
 {
     char hex[] = "0x6D66614";
+    printf("%d\n", htoi(hex));
+    return 0;
+}
+
+int htoi(char hex[])
+{
+    /*Write a function htoi(s), which converts a string of hexadecimal digits
+    (including an optional 0x or 0X) into its equivalent integer value. The allowable digits are 0
+    through 9, a through f, and A through F.*/
+
     int length = strlen(hex), i = 0;
     if(hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X'))
     {
@@ -20,6 +32,5 @@ int main()
         if(hex[i]>='a' && hex[i]<='f')
             sum += (hex[i] - 87)*(powl(16, length-i-1));
     }
-    printf("%u", sum);
-    return 0;
+    return sum;
 }
