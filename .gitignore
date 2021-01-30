@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Unfinished modules/exercises
+Book/Chapter 3/3-1.c
