@@ -16,12 +16,12 @@ int main()
 void itoa(int n, char s[])
 {
     /* In a two's complement number representation, our version of itoa does not
-    handle the largest negative number, that is, the value of n equal to -(2wordsize-1). Explain why
-    not. Modify it to print that value correctly, regardless of the machine on which it runs.*/
+       handle the largest negative number, that is, the value of n equal to -(2wordsize-1). Explain why
+       not. Modify it to print that value correctly, regardless of the machine on which it runs.*/
 
     /* Answer: the absolute values of negative values that a data type can hold are always with 1 more
-    than the positive ones. That's why without any code to check for that, the script can't convert it
-    to a positive number*/
+       than the positive ones. That's why without any code to check for that, the script can't convert it
+       to a positive number*/
 
     int i, sign, negative_flag = 0;
     if ((sign = n) < 0)
