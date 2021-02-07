@@ -3,7 +3,7 @@
 
 int main()
 {
-    /*Write a loop equivalent to the for loop above without using && or ||.*/
+    /* Write a loop equivalent to the for loop above without using && or ||.*/
 
     char s[lim], c;
     for (int i=0; i < lim-1; ++i)

@@ -11,8 +11,8 @@ int main()
 
 unsigned invert(unsigned x, int p, int n)
 {
-    /*Write a function invert(x,p,n) that returns x with the n bits that begin at
-    position p inverted (i.e., 1 changed into 0 and vice versa), leaving the others unchanged.*/
+    /* Write a function invert(x,p,n) that returns x with the n bits that begin at
+       position p inverted (i.e., 1 changed into 0 and vice versa), leaving the others unchanged.*/
 
     unsigned temp = x;
     temp = (temp << 7-p & 0xff) >> 8-n <<p-n+1;
