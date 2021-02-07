@@ -5,6 +5,8 @@ void remove_blanks(char sentence[], int len, char output_sentence[]);
 
 int main()
 {
+    /* Write a program to remove trailing blanks and tabs from each line of input,
+       and to delete entirely blank lines.*/
     char sentence[100];
     char output_sentence[100];
     int i = input(sentence);

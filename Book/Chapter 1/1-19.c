@@ -6,6 +6,8 @@ void reverse_order(char sentence[], char output_sentence[], int len);
 
 int main()
 {
+    /* Write a function reverse(s) that reverses the character string s. Use it to
+       write a program that reverses its input a line at a time.*/
     char sentence[100];
     char output_sentence[100];
     int i = input(sentence);

@@ -4,6 +4,8 @@ for fahr = 0, 20, ..., 300 */
 
 int main()
 {
+    /* Rewrite the temperature conversion program of Section 1.2 to use a function
+       for conversion.*/
     int fahr, celsius;
     int lower, upper, step;
 

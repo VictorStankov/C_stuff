@@ -2,6 +2,7 @@
 
 int main()
 {
+    /* Write a program to count blanks, tabs, and newlines.*/
     double blanks, tabs, newlines;
     int c;
 
