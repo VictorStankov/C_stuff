@@ -14,6 +14,9 @@ int main()
 
 void itoa(int n, char s[], int min_width)
 {
+    /* Write a version of itoa that accepts three arguments instead of two. The third
+       argument is a minimum field width; the converted number must be padded with blanks on the
+       left if necessary to make it wide enough.*/
     int i, sign, negative_flag = 0;
     if ((sign = n) < 0)
         n = -n;
