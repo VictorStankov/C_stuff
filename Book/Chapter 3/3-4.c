@@ -41,7 +41,6 @@ void itoa(int n, char s[])
         }
         else
             s[i++] = abs(n % 10) + '0';
-        s[i+1] = '\0';
     }
     while ((n /= 10) > 0);
     if (sign < 0)
