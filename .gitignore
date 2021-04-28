@@ -53,3 +53,7 @@ dkms.conf
 
 # Unfinished modules/exercises
 Book/Chapter 3/3-1.c
+
+# Unnecessary files
+*.bin
+*.txt
