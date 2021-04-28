@@ -18,6 +18,7 @@ void ungetch(int);
 void print();
 void duplicate();
 void swap();
+void getline();
 
 /* reverse Polish calculator */
 int main()
@@ -26,6 +27,7 @@ int main()
     double op2, v;
     char s[MAXOP], arr[2];
     extern int sp;
+    getline();
 
     printf("Welcome to this really shabby reverse Polish notation calculator.\n");
     printf("You have basic functions such as subtraction, multiplication etc.\n");
@@ -147,18 +149,18 @@ double pop(void)
 /* getop: get next character or numeric operand */
 int getop(char s[])
 {
-    int i, c;
-    while ((s[0] = c = getch()) == ' ' || c == '\t')
+    int i, c, t=0;
+    while ((s[0] = c = buf[t++] == ' ' || c == '\t' || t!= bufp)
         ;
     s[1] = '\0';
     if (!isdigit(c) && c != '.' && c != '-')
         return c; /* not a number */
     i = 0;
     if (c == '-' || isdigit(c)) /* collect integer part */
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = c = buf[t++]))
             ;
     if (c == '.') /* collect fraction part */
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = c = buf[t++]))
             ;
     s[i] = '\0';
     if (c != EOF)
@@ -170,17 +172,11 @@ int getop(char s[])
 
 char buf[BUFSIZE]; /* buffer for ungetch */
 int bufp = 0; /* next free position in buf */
-int getch(void) /* get a (possibly pushed-back) character */
-{
-    return (bufp > 0) ? buf[--bufp] : getchar();
-}
 
-void ungetch(int c) /* push character back on input */
+void getline()
 {
-    if (bufp >= BUFSIZE)
-        printf("ungetch: too many characters\n");
-    else
-        buf[bufp++] = c;
+    gets(buf);
+    bufp = strlen(buf);
 }
 
 void print()
