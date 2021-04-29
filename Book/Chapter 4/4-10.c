@@ -13,12 +13,10 @@
 int getop(char []);
 void push(double);
 double pop(void);
-int getch(void);
-void ungetch(int);
 void print();
 void duplicate();
 void swap();
-void getline();
+void getLine();
 
 /* reverse Polish calculator */
 int main()
@@ -27,7 +25,6 @@ int main()
     double op2, v;
     char s[MAXOP], arr[2];
     extern int sp;
-    getline();
 
     printf("Welcome to this really shabby reverse Polish notation calculator.\n");
     printf("You have basic functions such as subtraction, multiplication etc.\n");
@@ -97,19 +94,19 @@ int main()
             case '!':
                 for(int i=0; i<3; ++i)
                     arr[i] = getop(s);
-                if(strcmp(arr, "sin") == 0)
+                if(!strcmp(arr, "sin"))
                 {
                     double radian = (double)PI / 180;
                     push(sin(pop()*radian));
                 }
-                if(strcmp(arr, "cos") == 0)
+                if(!strcmp(arr, "cos"))
                 {
                     double radian = (double)PI / 180;
                     push(cos(pop()*radian));
                 }
-                if(strcmp(arr, "exp") == 0)
+                if(!strcmp(arr, "exp"))
                     push(exp(pop()));
-                if(strcmp(arr, "pow") == 0)
+                if(!strcmp(arr, "pow"))
                 {
                     double power = pop();
                     push(pow(pop(), power));
@@ -117,9 +114,11 @@ int main()
                 break;
             default:
                 printf("error: unknown command %s\n", s);
-                    break;
+                break;
         }
     }
+    while(sp>0)
+        printf("%.2f ", pop());
     return 0;
 }
 
@@ -146,36 +145,48 @@ double pop(void)
     }
 }
 
-/* getop: get next character or numeric operand */
-int getop(char s[])
-{
-    int i, c, t=0;
-    while ((s[0] = c = buf[t++] == ' ' || c == '\t' || t!= bufp)
-        ;
-    s[1] = '\0';
-    if (!isdigit(c) && c != '.' && c != '-')
-        return c; /* not a number */
-    i = 0;
-    if (c == '-' || isdigit(c)) /* collect integer part */
-        while (isdigit(s[++i] = c = buf[t++]))
-            ;
-    if (c == '.') /* collect fraction part */
-        while (isdigit(s[++i] = c = buf[t++]))
-            ;
-    s[i] = '\0';
-    if (c != EOF)
-        ungetch(c);
-    if (strcmp(s, "-") == 0)
-        return '-';
-    return NUMBER;
-}
-
 char buf[BUFSIZE]; /* buffer for ungetch */
 int bufp = 0; /* next free position in buf */
 
-void getline()
+int i;
+int getop(char s[])
 {
-    gets(buf);
+    if(bufp == 0 || i == bufp-1)
+    {
+        i = -1;
+        getLine();
+    }
+    int t=0;
+    char c;
+    for(i; i<=bufp;)
+    {
+        ++i;
+        c = buf[i];
+        if(c == ' ' || c == '\t')
+            continue;
+        if(!isdigit(c) && c != '.' && c != '-')
+            return c; /* not a number */
+        if (c == '-' || isdigit(c)) /* collect integer part */
+        {
+            s[t] = c;
+            s[t+1] = '\0';
+        }
+        while(isdigit(s[++t] = c = buf[++i]))
+            ;
+        if (c == '.') /* collect fraction part */
+            while (isdigit(s[++t] = c = buf[++i]))
+                ;
+        if (!strcmp(s, "-"))
+            return '-';
+        return NUMBER;
+    }
+}
+
+/* 4-10. An alternate organization uses getline to read an entire input line; this makes
+   getch and ungetch unnecessary. Revise the calculator to use this approach.*/
+void getLine()
+{
+    fgets(buf, BUFSIZE, stdin);
     bufp = strlen(buf);
 }
 
