@@ -145,6 +145,8 @@ double pop(void)
 /* getop: get next character or numeric operand */
 int getop(char s[])
 {
+    /* 4-11. Modify getop so that it doesn't need to use ungetch. Hint: use an internal
+       static variable.*/
     static char character;
     int i, c, character_flag = 0;
     if(character)
