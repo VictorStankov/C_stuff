@@ -95,19 +95,19 @@ int main()
             case '!':
                 for(int i=0; i<3; ++i)
                     arr[i] = getop(s);
-                if(strcmp(arr, "sin") == 0)
+                if(!strcmp(arr, "sin"))
                 {
                     double radian = (double)PI / 180;
                     push(sin(pop()*radian));
                 }
-                if(strcmp(arr, "cos") == 0)
+                if(!strcmp(arr, "cos"))
                 {
                     double radian = (double)PI / 180;
                     push(cos(pop()*radian));
                 }
-                if(strcmp(arr, "exp") == 0)
+                if(!strcmp(arr, "exp"))
                     push(exp(pop()));
-                if(strcmp(arr, "pow") == 0)
+                if(!strcmp(arr, "pow"))
                 {
                     double power = pop();
                     push(pow(pop(), power));
@@ -163,7 +163,7 @@ int getop(char s[])
     s[i] = '\0';
     if (c != EOF)
         ungetch(c);
-    if (strcmp(s, "-") == 0)
+    if (!strcmp(s, "-"))
         return '-';
     return NUMBER;
 }

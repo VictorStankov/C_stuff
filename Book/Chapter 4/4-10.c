@@ -117,8 +117,6 @@ int main()
                 break;
         }
     }
-    while(sp>0)
-        printf("%.2f ", pop());
     return 0;
 }
 
