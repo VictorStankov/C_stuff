@@ -16,21 +16,22 @@ struct List
 };
 typedef struct List List;
 
-void addNewArtist(List* root);
+void addNewArtist(List **root);
 
 int main()
 {
     List* root = NULL;
-	addNewArtist(root);
-	printf("%x\n", root);
+	addNewArtist(&root);
 	printf("%s, %d, %s, %f\n", root->Artist.name, root->Artist.age, root->Artist.nationality, root->Artist.income);
+    addNewArtist(&root);
+    printf("%s, %d, %s, %f\n", root->next->Artist.name, root->next->Artist.age, root->next->Artist.nationality, root->next->Artist.income);
 	return 0;
 }
 
-void addNewArtist(List* root)
+void addNewArtist(List **root)
 {
-    List *curr_item = root;
-    if(root != NULL)
+    List *curr_item = *root;
+    if(*root != NULL)
     {
         while(curr_item->next != NULL)
             curr_item = curr_item->next;
@@ -46,10 +47,9 @@ void addNewArtist(List* root)
     new_item->Artist = Artist;
     new_item->next = NULL;
     printf("%s, %d, %s, %f\n", new_item->Artist.name, new_item->Artist.age, new_item->Artist.nationality, new_item->Artist.income);
-    if(root == NULL)
+    if(*root == NULL)
     {
-        root = new_item;
-        printf("%x\n", root);
+        *root = new_item;
     }
     else curr_item->next = new_item;
 }
