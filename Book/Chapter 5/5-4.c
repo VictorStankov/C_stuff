@@ -4,8 +4,7 @@ int strend(char* s, char* t);
 
 int main()
 {
-    double a = 5;
-    printf("%d\n, %lf\n", strend("asddsa", "dsa"), a);
+    printf("%d\n", strend("asddsa", "dsa"));
     return 0;
 }
 
