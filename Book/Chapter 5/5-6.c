@@ -48,7 +48,6 @@ int atoi(char *s)
 /* itoa: convert n to characters in s */
 void itoa(char *s, int num)
 {
-    //static int i = 0;
     static int flag = 0;
     if(num<0)
     {
@@ -64,7 +63,6 @@ void itoa(char *s, int num)
             *s++ = '-';
         *s = '\0';
     }
-    // reverse(s);
 }
 
 /* reverse: reverse string s in place */
