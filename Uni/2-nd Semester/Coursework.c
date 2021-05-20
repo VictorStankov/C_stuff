@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 struct City
@@ -18,12 +19,39 @@ typedef struct List List;
 List* root = NULL;
 
 void createFile();
-void readFromFile();
+int readFromFile();
+void addNewCity(int n);
 
 int main()
 {
+    char c;
     //createFile();
-    readFromFile();
+    int cities = readFromFile();
+    List* curr_item = root;
+    while(1)
+    {
+        for(int i=1; i<=cities; ++i)
+        {   
+            if(i % 3 == 0 && i !=0 && i != cities)
+                printf("%d) %s\n", i, curr_item->City.name);
+
+            else if(strlen(curr_item->City.name) < 5)
+                printf("%d) %s\t\t", i, curr_item->City.name);
+
+            else
+                printf("%d) %s\t", i, curr_item->City.name);
+
+            curr_item = curr_item->next;
+        }
+        printf("\n\nA - Add a New City; D - Calculate Distance; Q - Quit\nEnter a character: ");
+        c = getchar();
+        getchar();
+        if(c == 'A' || c == 'a')
+            addNewCity(cities++);
+        else if(c == 'Q' || c == 'q')
+            break;
+        curr_item = root;
+    }
     return 0;
 }
 
@@ -92,7 +120,9 @@ void createFile()
     fclose(output);
 }
 
-void readFromFile()
+int*** A = NULL;
+
+int readFromFile()
 {
     int n, length;
 
@@ -114,7 +144,7 @@ void readFromFile()
         new_item->City.date[length] = '\0';
         new_item->next = NULL;
 
-        printf("%d %s %d %d %s\n", new_item->City.id, new_item->City.name, new_item->City.population, new_item->City.area, new_item->City.date);
+        // printf("%d %s %d %d %s\n", new_item->City.id, new_item->City.name, new_item->City.population, new_item->City.area, new_item->City.date);
 
         if(root == NULL)
         {
@@ -128,7 +158,7 @@ void readFromFile()
             curr_item->next = new_item;
         }
     }
-    int*** A = (int***)malloc(n * sizeof(int**));
+    A = (int***)malloc(n * sizeof(int**));
  
     if (A == NULL)
         exit(0);
@@ -161,6 +191,49 @@ void readFromFile()
         A[i][j][1] = A[j][i][1] = quality;
         A[i][j][2] = A[j][i][2] = rating;
     }
+    // for (int i = 0; i < n; i++)
+    // {
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         for (int k = 0; k < 3; k++) {
+    //             printf("%d ", A[i][j][k]);
+    //         }
+    //         printf("\n");
+    //     }
+    //     printf("\n");
+    // }
+    return n;
+}
+
+void addNewCity(int n)
+{
+    List* new_item = (List*)malloc(sizeof(List));
+    List* curr_item = root;
+
+    new_item->City.id = ++n;
+    printf("%d\n", n);
+    printf("Name of new city: ");
+    gets(new_item->City.name);
+    printf("Population: ");
+    scanf("%d", &new_item->City.population);
+    printf("Area: ");
+    scanf("%d", &new_item->City.area);
+    getchar();
+    printf("Founding Date: ");
+    gets(new_item->City.date);
+    new_item->next = NULL;
+
+    while(curr_item->next != NULL)
+        curr_item = curr_item->next;
+    curr_item->next = new_item;
+    
+    A = (int***)realloc(A, n);
+    for(int i=0; i < n; ++i)
+    {
+        A[i] = (int**)realloc(A[i], n);
+        A[i][n-1] = (int*)malloc(sizeof(int) * 3);
+    }
+
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
@@ -172,4 +245,46 @@ void readFromFile()
         }
         printf("\n");
     }
+
+    int distance, quality, rating;
+    for(int i=0; i < n; ++i)
+    {
+        if(i != n-1)
+        {
+            printf("\n%d-%d:\nDistance: ", n, i + 1);
+            scanf("%d", &distance);
+            printf("Quality: ");
+            scanf("%d", &quality);
+            printf("Rating: ");
+            scanf("%d", &rating);
+        }
+        else
+        {
+            distance = 0;
+            quality = rating = -1;
+        }
+        printf("%d, %d\n", i, n);
+        A[i][n-1][0] = A[n-1][i][0] = distance;
+        A[i][n-1][1] = A[n-1][i][1] = quality;
+        A[i][n-1][2] = A[n-1][i][2] = rating;
+    }
+
+    printf("\nbleeeep\n\n");
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("111111\n");
+        for (int j = 0; j < n; j++)
+        {
+            printf("2222222\n");
+            for (int k = 0; k < 3; k++) {
+                printf("3333333\n");
+                printf("%d ", A[i][j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+    
+    printf("\n");
 }
