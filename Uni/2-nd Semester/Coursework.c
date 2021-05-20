@@ -10,7 +10,7 @@ typedef struct City City;
 
 struct List
 {
-    City;
+    struct City City;
     struct List* next;
 };
 typedef struct List List;
@@ -64,11 +64,11 @@ void createFile()
     int distance, quality, rating;
 
     for(int i=0; i<n; ++i)
-        for(int j=0; j<n; ++j)
+        for(int j=i; j<n; ++j)
         {
             if(i == j)
             {
-                distance = -1;
+                distance = 0;
                 quality = -1;
                 rating = -1;
             }
@@ -94,26 +94,82 @@ void createFile()
 
 void readFromFile()
 {
-    int n, id, population, area, length;
-    char name[30], date[15];
+    int n, length;
 
     List* curr_item = root;
     FILE* input = fopen("cities.bin", "rb");
     fread(&n, sizeof(int), 1, input);
-    printf("%d\n", n);
+
     for(int i=0; i<n; ++i)
     {
-        fread(&id, sizeof(int), 1, input);
+        List* new_item = (List*)malloc(sizeof(List));
+        fread(&new_item->City.id, sizeof(int), 1, input);
         fread(&length, sizeof(int), 1, input);
-        fread(name, sizeof(char), length, input);
-        fread(&population, sizeof(int), 1, input);
-        fread(&area, sizeof(int), 1, input);
+        fread(new_item->City.name, sizeof(char), length, input);
+        new_item->City.name[length] = '\0';
+        fread(&new_item->City.population, sizeof(int), 1, input);
+        fread(&new_item->City.area, sizeof(int), 1, input);
         fread(&length, sizeof(int), 1, input);
-        fread(date, sizeof(char), length, input);
-        printf("%d %s %d %d %s\n", id, name, population, area, date);
-        if(!root)
+        fread(new_item->City.date, sizeof(char), length, input);
+        new_item->City.date[length] = '\0';
+        new_item->next = NULL;
+
+        printf("%d %s %d %d %s\n", new_item->City.id, new_item->City.name, new_item->City.population, new_item->City.area, new_item->City.date);
+
+        if(root == NULL)
         {
-            
+            root = new_item;
         }
+        else
+        {
+            List* curr_item = root;
+            while(curr_item->next != NULL)
+                curr_item = curr_item->next;  // Scroll to the last node.
+            curr_item->next = new_item;
+        }
+    }
+    int*** A = (int***)malloc(n * sizeof(int**));
+ 
+    if (A == NULL)
+        exit(0);
+ 
+    for (int i = 0; i < n; i++)
+    {
+        A[i] = (int**)malloc(n * sizeof(int*));
+ 
+        if (A[i] == NULL)
+            exit(i);
+ 
+        for (int j = 0; j < n; j++)
+        {
+            A[i][j] = (int*)malloc(3 * sizeof(int));
+            if (A[i][j] == NULL)
+                exit(0);
+        }
+    }
+
+    int i, j, distance, quality, rating;
+    while(feof(input) == 0)
+    {
+        fread(&i, sizeof(int), 1, input);
+        fread(&j, sizeof(int), 1, input);
+        fread(&distance, sizeof(int), 1, input);
+        fread(&quality, sizeof(int), 1, input);
+        fread(&rating, sizeof(int), 1, input);
+        // printf("[%d] [%d] %d %d %d\n", i, j, distance, quality, rating);
+        A[i][j][0] = A[j][i][0] = distance;
+        A[i][j][1] = A[j][i][1] = quality;
+        A[i][j][2] = A[j][i][2] = rating;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = 0; k < 3; k++) {
+                printf("%d ", A[i][j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
     }
 }
