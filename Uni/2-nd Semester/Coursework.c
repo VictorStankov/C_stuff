@@ -20,6 +20,9 @@ List* root = NULL;
 
 void createFile();
 int readFromFile();
+int*** createArray(int n);
+void copyArray(int*** source, int*** destination, int n);
+void deleteArray(int*** array, int size);
 void addNewCity(int n);
 
 int main()
@@ -43,9 +46,10 @@ int main()
 
             curr_item = curr_item->next;
         }
-        printf("\n\nA - Add a New City; D - Calculate Distance; Q - Quit\nEnter a character: ");
+        printf("\n\nA - Add a New City; C - Calculate Distance; D - Delete a city; Q - Quit\nEnter a character: ");
         c = getchar();
-        getchar();
+        while(c == '\n')
+            c = getchar();
         if(c == 'A' || c == 'a')
             addNewCity(cities++);
         else if(c == 'Q' || c == 'q')
@@ -158,25 +162,7 @@ int readFromFile()
             curr_item->next = new_item;
         }
     }
-    A = (int***)malloc(n * sizeof(int**));
- 
-    if (A == NULL)
-        exit(0);
- 
-    for (int i = 0; i < n; i++)
-    {
-        A[i] = (int**)malloc(n * sizeof(int*));
- 
-        if (A[i] == NULL)
-            exit(i);
- 
-        for (int j = 0; j < n; j++)
-        {
-            A[i][j] = (int*)malloc(3 * sizeof(int));
-            if (A[i][j] == NULL)
-                exit(0);
-        }
-    }
+    A = createArray(n);
 
     int i, j, distance, quality, rating;
     while(feof(input) == 0)
@@ -186,7 +172,7 @@ int readFromFile()
         fread(&distance, sizeof(int), 1, input);
         fread(&quality, sizeof(int), 1, input);
         fread(&rating, sizeof(int), 1, input);
-        // printf("[%d] [%d] %d %d %d\n", i, j, distance, quality, rating);
+
         A[i][j][0] = A[j][i][0] = distance;
         A[i][j][1] = A[j][i][1] = quality;
         A[i][j][2] = A[j][i][2] = rating;
@@ -210,8 +196,9 @@ void addNewCity(int n)
     List* new_item = (List*)malloc(sizeof(List));
     List* curr_item = root;
 
-    new_item->City.id = ++n;
+    new_item->City.id = n + 1;
     printf("%d\n", n);
+    getchar();
     printf("Name of new city: ");
     gets(new_item->City.name);
     printf("Population: ");
@@ -227,31 +214,17 @@ void addNewCity(int n)
         curr_item = curr_item->next;
     curr_item->next = new_item;
     
-    A = (int***)realloc(A, n);
-    for(int i=0; i < n; ++i)
-    {
-        A[i] = (int**)realloc(A[i], n);
-        A[i][n-1] = (int*)malloc(sizeof(int) * 3);
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            for (int k = 0; k < 3; k++) {
-                printf("%d ", A[i][j][k]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
+    int*** temp = createArray(n + 1);
+    copyArray(A, temp, n);
+    deleteArray(A, n);
+    A = temp;
 
     int distance, quality, rating;
-    for(int i=0; i < n; ++i)
+    for(int i=0; i <= n; ++i)
     {
-        if(i != n-1)
+        if(i != n)
         {
-            printf("\n%d-%d:\nDistance: ", n, i + 1);
+            printf("\n%d-%d:\nDistance: ", n + 1, i + 1);
             scanf("%d", &distance);
             printf("Quality: ");
             scanf("%d", &quality);
@@ -263,28 +236,59 @@ void addNewCity(int n)
             distance = 0;
             quality = rating = -1;
         }
-        printf("%d, %d\n", i, n);
-        A[i][n-1][0] = A[n-1][i][0] = distance;
-        A[i][n-1][1] = A[n-1][i][1] = quality;
-        A[i][n-1][2] = A[n-1][i][2] = rating;
+        printf("%d, %d\n", i, n + 1);
+        A[i][n][0] = A[n][i][0] = distance;
+        printf("\n1\n");
+        A[i][n][1] = A[n][i][1] = quality;
+        printf("2\n");
+        A[i][n][2] = A[n][i][2] = rating;
+        printf("3\n\n");
     }
 
     printf("\nbleeeep\n\n");
+    printf("\n");
+}
 
+int*** createArray(int n)
+{
+    A = (int***)malloc(n * sizeof(int**));
+ 
+    if (A == NULL)
+        exit(0);
     for (int i = 0; i < n; i++)
     {
-        printf("111111\n");
+        A[i] = (int**)malloc(n * sizeof(int*));
+ 
+        if (A[i] == NULL)
+            exit(i);
+ 
         for (int j = 0; j < n; j++)
         {
-            printf("2222222\n");
-            for (int k = 0; k < 3; k++) {
-                printf("3333333\n");
-                printf("%d ", A[i][j][k]);
-            }
-            printf("\n");
+            A[i][j] = (int*)malloc(3 * sizeof(int));
+            if (A[i][j] == NULL)
+                exit(0);
         }
-        printf("\n");
     }
-    
-    printf("\n");
+
+    return A;
+}
+
+void copyArray(int*** source, int*** destination, int n)
+{
+    for(int i=0; i<n; ++i)
+        for(int j=0; j<n; ++j)
+            for(int k=0; k<3; ++k)
+                destination[i][j][k] = source[i][j][k];
+}
+
+void deleteArray(int*** array, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++) {
+            free(A[i][j]);
+        }
+        free(A[i]);
+    }
+    free(A);
 }
