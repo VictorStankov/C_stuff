@@ -130,7 +130,6 @@ int readFromFile()
 {
     int n, length;
 
-    List* curr_item = root;
     FILE* input = fopen("cities.bin", "rb");
     fread(&n, sizeof(int), 1, input);
 
@@ -147,8 +146,6 @@ int readFromFile()
         fread(new_item->City.date, sizeof(char), length, input);
         new_item->City.date[length] = '\0';
         new_item->next = NULL;
-
-        // printf("%d %s %d %d %s\n", new_item->City.id, new_item->City.name, new_item->City.population, new_item->City.area, new_item->City.date);
 
         if(root == NULL)
         {
@@ -177,17 +174,6 @@ int readFromFile()
         A[i][j][1] = A[j][i][1] = quality;
         A[i][j][2] = A[j][i][2] = rating;
     }
-    // for (int i = 0; i < n; i++)
-    // {
-    //     for (int j = 0; j < n; j++)
-    //     {
-    //         for (int k = 0; k < 3; k++) {
-    //             printf("%d ", A[i][j][k]);
-    //         }
-    //         printf("\n");
-    //     }
-    //     printf("\n");
-    // }
     return n;
 }
 
@@ -197,9 +183,8 @@ void addNewCity(int n)
     List* curr_item = root;
 
     new_item->City.id = n + 1;
-    printf("%d\n", n);
     getchar();
-    printf("Name of new city: ");
+    printf("\nName of new city: ");
     gets(new_item->City.name);
     printf("Population: ");
     scanf("%d", &new_item->City.population);
@@ -236,16 +221,11 @@ void addNewCity(int n)
             distance = 0;
             quality = rating = -1;
         }
-        printf("%d, %d\n", i, n + 1);
         A[i][n][0] = A[n][i][0] = distance;
-        printf("\n1\n");
         A[i][n][1] = A[n][i][1] = quality;
-        printf("2\n");
         A[i][n][2] = A[n][i][2] = rating;
-        printf("3\n\n");
     }
 
-    printf("\nbleeeep\n\n");
     printf("\n");
 }
 
@@ -286,9 +266,9 @@ void deleteArray(int*** array, int size)
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++) {
-            free(A[i][j]);
+            free(array[i][j]);
         }
-        free(A[i]);
+        free(array[i]);
     }
-    free(A);
+    free(array);
 }
