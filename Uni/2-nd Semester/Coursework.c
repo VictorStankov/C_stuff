@@ -25,11 +25,11 @@ void copyArray(int*** source, int*** destination, int n);
 void deleteArray(int*** array, int size);
 void addNewCity(int size);
 void deleteCity(int id, int size);
+void calculateDistance();
 
 int main()
 {
     char c;
-    //createFile();
     int cities = readFromFile();
     List* curr_item = root;
     while(1)
@@ -53,7 +53,9 @@ int main()
             c = getchar();
         if(c == 'A' || c == 'a')
             addNewCity(cities++);
-        if(c == 'D' || c == 'd')
+        else if(c == 'C' || c == 'c')
+            calculateDistance();
+        else if(c == 'D' || c == 'd')
         {
             int id;
             printf("Which city do you want to delete (ID): ");
@@ -62,6 +64,8 @@ int main()
         }
         else if(c == 'Q' || c == 'q')
             break;
+        else
+            printf("Invalid Character!\n");
         curr_item = root;
     }
     return 0;
@@ -114,7 +118,7 @@ void createFile()
             }
             else
             {
-                printf("%d-%d:\nDistance: ", i + 1, j + 1);
+                printf("\n%d-%d:\nDistance: ", i + 1, j + 1);
                 scanf("%d", &distance);
                 printf("Quality: ");
                 scanf("%d", &quality);
@@ -139,6 +143,17 @@ int readFromFile()
     int n, length;
 
     FILE* input = fopen("cities.bin", "rb");
+    if(input == NULL)
+    {
+        printf("File not found, creating new one...\n\n");
+        createFile();
+    }
+    input = fopen("cities.bin", "rb");
+    if(input == NULL)
+    {
+        printf("Couldn't open file. Exiting...\n");
+        exit(0);
+    }
     fread(&n, sizeof(int), 1, input);
 
     for(int i=0; i<n; ++i)
@@ -260,18 +275,26 @@ void deleteCity(int id, int size)
     copyArray(A, temp, size-1);
     deleteArray(A, size);
     A = temp;
+}
 
-    for (int i = 0; i < size-1; i++)
+void calculateDistance()
+{
+    int id, prev_id, distance = 0, rating=0, n=0;
+    printf("Enter the same ID twice to stop.\n\n");
+    printf("ID of starting city: ");
+    scanf("%d", &prev_id);
+    while(1)
     {
-        for (int j = 0; j < size-1; j++)
-        {
-            for (int k = 0; k < 3; k++) {
-                printf("%3d ", A[i][j][k]);
-            }
-            printf("\n");
-        }
-        printf("\n");
+        printf("Enter city ID: ");
+        scanf("%d", &id);
+        if(prev_id == id)
+            break;
+        distance += A[prev_id - 1][id - 1][0];
+        rating += A[prev_id - 1][id - 1][2];
+        n++;
+        prev_id = id;
     }
+    printf("\nTotal distance: %d\nAverage Rating: %.2f\n\n", distance, (float)rating/n);
 }
 
 int*** createArray(int size)
