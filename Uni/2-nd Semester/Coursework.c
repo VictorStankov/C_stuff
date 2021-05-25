@@ -16,7 +16,7 @@ struct List
 };
 typedef struct List List;
 
-List* root = NULL;
+List* root = NULL;  // Define root list entry.
 
 void createFile();
 int readFromFile();
@@ -30,16 +30,16 @@ void calculateDistance();
 int main()
 {
     char c;
-    int cities = readFromFile();
+    int cities = readFromFile();  // Reads from the file and returns the number of cities read from the file.
     List* curr_item = root;
     while(1)
     {
-        for(int i=1; i<=cities; ++i)
+        for(int i=1; i<=cities; ++i)  // Displays the cities on the screen with their IDs.
         {
-            if(i % 3 == 0 && i !=0 && i != cities)
+            if(i % 3 == 0 && i !=0 && i != cities)  // Limits only 3 cities on a row.
                 printf("%d) %s\n", i, curr_item->City.name);
 
-            else if(strlen(curr_item->City.name) < 5)
+            else if(strlen(curr_item->City.name) < 5)  // Fixes tab characters based on the city's name's length.
                 printf("%d) %s\t\t", i, curr_item->City.name);
 
             else
@@ -48,11 +48,11 @@ int main()
             curr_item = curr_item->next;
         }
         printf("\n\nA - Add a New City; C - Calculate Distance; D - Delete a city; Q - Quit\nEnter a character: ");
-        c = getchar();
-        while(c == '\n')
+        c = getchar();  // Awaits user input.
+        while(c == '\n')  // Consumes any leftover newline characters.
             c = getchar();
         if(c == 'A' || c == 'a')
-            addNewCity(cities++);
+            addNewCity(cities++);  // Adds a new city and modifies the counter after that.
         else if(c == 'C' || c == 'c')
             calculateDistance();
         else if(c == 'D' || c == 'd')
@@ -60,13 +60,13 @@ int main()
             int id;
             printf("Which city do you want to delete (ID): ");
             scanf("%d", &id);
-            deleteCity(id-1, cities--);
+            deleteCity(id-1, cities--);  // Removes the selected city and modifies the counter after that.
         }
         else if(c == 'Q' || c == 'q')
-            break;
+            break;  // Kills the program.
         else
-            printf("Invalid Character!\n");
-        curr_item = root;
+            printf("Invalid Character!\n");  // Scolds the user for not following simple commands.
+        curr_item = root;  // Resets the current item for the next loop.
     }
     return 0;
 }
@@ -79,7 +79,7 @@ void createFile()
 
     printf("How many cities are you going to enter: ");
     scanf("%d", &n);
-    getchar();
+    getchar();  // Used to consume the excess \n character.
     fwrite(&n, sizeof(int), 1, output);
 
     for(int i=0; i<n; ++i)
@@ -107,10 +107,10 @@ void createFile()
 
     int distance, quality, rating;
 
-    for(int i=0; i<n; ++i)
+    for(int i=0; i<n; ++i)  // Loop that gets the distances between cities.
         for(int j=i; j<n; ++j)
         {
-            if(i == j)
+            if(i == j)  // Check if the city is the same.
             {
                 distance = 0;
                 quality = -1;
@@ -143,34 +143,35 @@ int readFromFile()
     int n, length;
 
     FILE* input = fopen("cities.bin", "rb");
-    if(input == NULL)
+    if(input == NULL)  // If file opening fails, a new file is created.
     {
         printf("File not found, creating new one...\n\n");
         createFile();
     }
+
     input = fopen("cities.bin", "rb");
-    if(input == NULL)
+    if(input == NULL)  // If it fails again, exit the program.
     {
         printf("Couldn't open file. Exiting...\n");
         exit(0);
     }
-    fread(&n, sizeof(int), 1, input);
+    fread(&n, sizeof(int), 1, input);  // Read how many cities are to be read.
 
     for(int i=0; i<n; ++i)
     {
-        List* new_item = (List*)malloc(sizeof(List));
+        List* new_item = (List*)malloc(sizeof(List));  // Create a new list item.
         fread(&new_item->City.id, sizeof(int), 1, input);
         fread(&length, sizeof(int), 1, input);
         fread(new_item->City.name, sizeof(char), length, input);
-        new_item->City.name[length] = '\0';
+        new_item->City.name[length] = '\0';  // Put a terminating character just in case.
         fread(&new_item->City.population, sizeof(int), 1, input);
         fread(&new_item->City.area, sizeof(int), 1, input);
         fread(&length, sizeof(int), 1, input);
         fread(new_item->City.date, sizeof(char), length, input);
-        new_item->City.date[length] = '\0';
-        new_item->next = NULL;
+        new_item->City.date[length] = '\0';  // Same here.
+        new_item->next = NULL;  // Set the next pointer to NULL to avoid problems.
 
-        if(root == NULL)
+        if(root == NULL)  // Check if the root item has no values and assigns it the new item.
         {
             root = new_item;
         }
@@ -182,10 +183,10 @@ int readFromFile()
             curr_item->next = new_item;
         }
     }
-    A = createArray(n);
+    A = createArray(n);  // Creates a 3D (N x N x 3) array.
 
     int i, j, distance, quality, rating;
-    while(feof(input) == 0)
+    while(feof(input) == 0)  // Reads from the file and fills in the array.
     {
         fread(&i, sizeof(int), 1, input);
         fread(&j, sizeof(int), 1, input);
@@ -202,33 +203,33 @@ int readFromFile()
 
 void addNewCity(int size)
 {
-    List* new_item = (List*)malloc(sizeof(List));
+    List* new_item = (List*)malloc(sizeof(List));  // Create new list item.
     List* curr_item = root;
 
-    new_item->City.id = size + 1;
-    getchar();
+    new_item->City.id = size + 1;  // Set the ID based on the size of the array.
+    getchar();  // Used to consume the excess \n character.
     printf("\nName of new city: ");
     gets(new_item->City.name);
     printf("Population: ");
     scanf("%d", &new_item->City.population);
     printf("Area: ");
     scanf("%d", &new_item->City.area);
-    getchar();
+    getchar();  // Same here.
     printf("Founding Date: ");
     gets(new_item->City.date);
-    new_item->next = NULL;
+    new_item->next = NULL;  // Set the next pointer to NULL to avoid problems.
 
-    while(curr_item->next != NULL)
+    while(curr_item->next != NULL)  // Scroll to the last node.
         curr_item = curr_item->next;
-    curr_item->next = new_item;
+    curr_item->next = new_item;  // Assign the new city/item.
 
-    int*** temp = createArray(size + 1);
-    copyArray(A, temp, size);
-    deleteArray(A, size);
-    A = temp;
+    int*** temp = createArray(size + 1);  // Temp array that's bigger than the original one.
+    copyArray(A, temp, size);  // Copy the contents of the original array to the temp one.
+    deleteArray(A, size);  // Free the memory occupied from the old array.
+    A = temp;  // Set A to point to the temporary array (which isn't temporary anymore).
 
     int distance, quality, rating;
-    for(int i=0; i <= size; ++i)
+    for(int i=0; i <= size; ++i)  // Define distances between the new city and the rest.
     {
         if(i != size)
         {
@@ -255,26 +256,31 @@ void addNewCity(int size)
 void deleteCity(int id, int size)
 {
     List* prev_item = root;
-    while(prev_item->next->City.id == id-1)
+
+    while(prev_item->next->City.id == id-1)  // Scroll to the item before the one we want to remove.
         prev_item = prev_item->next;
-    prev_item->next = prev_item->next->next;
-    while(prev_item = prev_item->next)
+    
+    List* del_item = prev_item->next;  // Save the to-be-deleted item in a new variable.
+    prev_item->next = prev_item->next->next;  // Set the previous item's "next" to point to the one after the deleted item.
+    free(del_item);  // Free the memory.
+
+    while(prev_item = prev_item->next)  // Adjust following cities' IDs 
         prev_item->City.id -= 1;
     
-    for(int i=0; i<size; ++i)
+    for(int i=0; i<size; ++i)  // Deletes the row of data of the city.
         for(int j = id; j<size-1; ++j)
             for(int k=0; k<3; ++k)
                 A[j][i][k] = A[j+1][i][k];
 
-    for(int i=0; i<size; ++i)
+    for(int i=0; i<size; ++i)  // Deletes the column of data of the city.
         for(int j = id; j<size-1; ++j)
             for(int k=0; k<3; ++k)
                 A[i][j][k] = A[i][j+1][k];
     
-    int*** temp = createArray(size-1);
-    copyArray(A, temp, size-1);
-    deleteArray(A, size);
-    A = temp;
+    int*** temp = createArray(size-1);  // Create a smaller temporary array.
+    copyArray(A, temp, size-1);  // Copy the contents of the adjusted array to the temporary one (for cleanliness).
+    deleteArray(A, size);  // Free the memory occupied from the old array.
+    A = temp;  // Set A to point to the temporary array (which isn't temporary anymore).
 }
 
 void calculateDistance()
@@ -282,37 +288,37 @@ void calculateDistance()
     int id, prev_id, distance = 0, rating=0, n=0;
     printf("Enter the same ID twice to stop.\n\n");
     printf("ID of starting city: ");
-    scanf("%d", &prev_id);
+    scanf("%d", &prev_id);  // Get the starting city's ID.
     while(1)
     {
         printf("Enter city ID: ");
-        scanf("%d", &id);
-        if(prev_id == id)
+        scanf("%d", &id);  // Get following cities' IDs
+        if(prev_id == id)  // If it's the same with the previous ID, stop and display results.
             break;
         distance += A[prev_id - 1][id - 1][0];
         rating += A[prev_id - 1][id - 1][2];
-        n++;
+        n++;  // Used for averaging the ratings.
         prev_id = id;
     }
-    printf("\nTotal distance: %d\nAverage Rating: %.2f\n\n", distance, (float)rating/n);
+    printf("\nTotal distance: %d\nAverage Rating: %.2f\n\n", distance, (float)rating / n);
 }
 
-int*** createArray(int size)
+int*** createArray(int size)  // Creates a 3D (N x N x 3) array.
 {
-    int*** array = (int***)malloc(size * sizeof(int**));
+    int*** array = (int***)malloc(size * sizeof(int**));  // Create a triple int pointer.
 
     if (array == NULL)
         exit(0);
     for (int i = 0; i < size; i++)
     {
-        array[i] = (int**)malloc(size * sizeof(int*));
+        array[i] = (int**)malloc(size * sizeof(int*));  // Fill every item of the triple pointer with a double int pointer.
 
         if (array[i] == NULL)
             exit(i);
 
         for (int j = 0; j < size; j++)
         {
-            array[i][j] = (int*)malloc(3 * sizeof(int));
+            array[i][j] = (int*)malloc(3 * sizeof(int));  // Fill every item of the double pointer with 3 int pointers.
             if (array[i][j] == NULL)
                 exit(0);
         }
@@ -321,7 +327,7 @@ int*** createArray(int size)
     return array;
 }
 
-void copyArray(int*** source, int*** destination, int size)
+void copyArray(int*** source, int*** destination, int size)  // Copies the contents from one array to another based on given size.
 {
     for(int i=0; i<size; ++i)
         for(int j=0; j<size; ++j)
@@ -329,7 +335,7 @@ void copyArray(int*** source, int*** destination, int size)
                 destination[i][j][k] = source[i][j][k];
 }
 
-void deleteArray(int*** array, int size)
+void deleteArray(int*** array, int size)  // Free the memory occupied from an array.
 {
     for (int i = 0; i < size; i++)
     {
