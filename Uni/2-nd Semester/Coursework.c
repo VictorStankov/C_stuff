@@ -21,7 +21,7 @@ List* root = NULL;  // Define root list entry.
 void createFile();
 int readFromFile();
 int*** createArray(int size);
-void copyArray(int*** source, int*** destination, int n);
+void copyArray(int*** source, int*** destination, int size);
 void deleteArray(int*** array, int size);
 void addNewCity(int size);
 void deleteCity(int id, int size);
