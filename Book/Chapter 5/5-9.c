@@ -10,7 +10,8 @@ int main()
     return 0;
 }
 
-
+/* 5-9. Rewrite the routines day_of_year and month_day with pointers instead of
+   indexing.*/
 static char year_days[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static char leap_days[] = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
