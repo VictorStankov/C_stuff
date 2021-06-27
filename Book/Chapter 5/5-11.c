@@ -6,14 +6,13 @@ void detab(int N);
 
 int main(int argc, char *argv[])
 {
-    /* 1-20. Write a program detab that replaces tabs in the input with the proper number
-       of blanks to space to the next tab stop. Assume a fixed set of tab stops, say every n columns.
-       Should n be a variable or a symbolic parameter?*/
-
+    /* 5-11. Modify the program entab and detab (written as exercises in Chapter 1) to
+       accept a list of tab stops as arguments. Use the default tab settings if there are 
+       no arguments.*/
     char functionality;
-    int N;
+    int N = 4;
     
-    if(argc != 3)
+    if(argc == 1)
     {
         printf("Please provide a single number for N columns and \"-e\" or \"-d\" for en/detabbing respectively.\n");
         exit(0);
@@ -42,6 +41,10 @@ int main(int argc, char *argv[])
 
 void detab(int N)
 {
+    /* 1-20. Write a program detab that replaces tabs in the input with the proper number
+       of blanks to space to the next tab stop. Assume a fixed set of tab stops, say every n columns.
+       Should n be a variable or a symbolic parameter?*/
+
     int c, letters = 0;
     while((c = getchar()) != EOF)
     {
@@ -64,6 +67,11 @@ void detab(int N)
 
 void entab(int N)
 {
+    /* 1-21. Write a program entab that replaces strings of blanks by the minimum
+       number of tabs and blanks to achieve the same spacing. Use the same tab stops as for detab.
+       When either a tab or a single blank would suffice to reach a tab stop, which should be given
+       preference?*/
+
     int c;
     int i = 0;
 
