@@ -16,7 +16,7 @@ char token[MAXTOKEN];    /* last token string */
 char name[MAXTOKEN];     /* identifier name */ 
 char datatype[MAXTOKEN]; /* data type = char, int, etc. */ 
 char out[1000];
-int const_flag = 0;
+int const_flag = 0, name_flag = 0;  
 
 int main()  /* convert declaration to words */ 
 {
@@ -109,7 +109,10 @@ void dirdcl(void)
 	else if (tokentype == NAME)  /* variable name */
 	{
 		if(check_word(token) == 0) // To finish
+        {
 			strcpy(name, token);
+            name_flag = 1;
+        }
 	}
 
 	else 
@@ -117,8 +120,8 @@ void dirdcl(void)
     while ((type=gettoken()) == PARENS || type == BRACKETS || type == NAME) 
 		if (type == PARENS) 
             strcat(out, " function returning");
-		else if(type == NAME)
-			;
+		else if(type == NAME && name_flag == 0)
+			strcpy(name, token);
 		else 
 		{ 
             strcat(out, " array"); 
