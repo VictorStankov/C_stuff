@@ -18,18 +18,15 @@ void strlower(char**);
 char* strdUp(char*);
 
 struct entry* root;
+struct entry* words;
 int f = 0, bufp = 0;
 
-/* 6-3. Write a cross-referencer that prints a list of all words in a document, and for each word,
- * a list of the line numbers on which it occurs. Remove noise words like "the", "and"
- * and so on.*/
+/* 6-4. Write a program that prints the distinct words in its input sorted into decreasing
+ * order of frequency of occurrence. Precede each word by its count.*/
 int main()
 {
     char word[MAXWORD];
-	struct entry** words = (struct entry**)malloc(100 * sizeof(struct entry));
-
-    //for (int i = 0; i < 100; i++)
-        //words[i] = NULL;
+	words = (struct entry*)malloc(100 * sizeof(struct entry));
 
     while (getword(word, MAXWORD) != EOF)
         if (isalpha(word[0]) && checknoise(word))
@@ -38,39 +35,30 @@ int main()
     int sort(const void* a, const void* b);
     qsort(words, f, sizeof(struct entry), sort);
     for (int k = 0; k < f; ++k)
-        printf("%s\t%d\n", words[k]->word, words[k]->occurrences);
+        printf("%2d\t%s\n", words[k].occurrences, words[k].word);
     return 0;
 }
 
 void addword(char* word)
 {
-	extern struct entry** words;
     if (f != 0 && f % 100 == 0)
-    {
         words = realloc(words, (f + 100) * sizeof(struct entry));
-        for (int i = f; i < f + 100; ++i)
-            words[i] = NULL;
-    }
     for (int j = 0; j < f; ++j)
-        if (strcmp(word, words[j]->word) == 0)
+        if (strcmp(word, words[j].word) == 0)
         {
-            words[j]->occurrences++;
+            words[j].occurrences++;
             return;
         }
 
-    words[f] = (struct entry*)malloc(sizeof(struct entry));
-    if (words[f] == NULL)
-        exit(1);
-    words[f]->word = strdUp(word);
-    words[f++]->occurrences = 1;
+    words[f].word = strdUp(word);
+    words[f++].occurrences = 1;
 }
 
 int sort(const void* a, const void* b)
 {
     struct entry* first = (struct entry*)a;
     struct entry* second = (struct entry*)b;
-    printf("%s %d | %s %d\n", first->word, first->occurrences, second->word, second->occurrences);
-	return first->occurrences - second->occurrences;
+	return second->occurrences - first->occurrences;
 }
 
 /* getword:  get next word or character from input */
